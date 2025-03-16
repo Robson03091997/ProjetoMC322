@@ -1,7 +1,7 @@
 public class Ambiente
 {
-    public int largura;
-    public int altura;
+    private int largura;
+    private int altura;
 
     //contrutor
     
