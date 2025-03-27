@@ -1,23 +1,66 @@
 public class Robo {
-    private String nome;
-    private int posicaoX;
-    private int posicaoY;
+    protected String nome;
+    protected int posicaoX;
+    protected int posicaoY;
+    protected String direcao;
+    public static int numeroDeRobos = 0;
 
-    //declarando construtor
-    public Robo(String nome, int posicaoX, int posicaoY){
+    //declarando construtores ------------------------------------------------------
+    protected Robo(String nome, int posicaoX, int posicaoY, String direcao){
         this.nome = nome;
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
+        this.direcao = direcao;
+        Robo.numeroDeRobos++;
     }
 
-    //declarando métodos para mover o robo e para exibir a posição atual
-    public void mover (int deltaX, int deltaY){
-        this.posicaoX = posicaoX + deltaX;
-        this.posicaoY = posicaoY + deltaY;
+    @overload
+    protected Robo(){
+        this.nome = "Robo"+toString(Robo.numeroDeRobos);
+        this.posicaoX = 0;
+        this.posicaoY = 0;
+        this.direcao = "Não definida";
+        Robo.numeroDeRobos++;
     }
 
-    public void exibirPosicao(){
+    //Declarando métodos get ----------------------------------------------------
+    protected String getNome(){
+        return this.nome;
+    }
+
+    protected int getPosX() {
+        return this.posicaoX;
+    }
+
+    protected int getPosY() {
+        return this.posicaoY;
+    }
+
+    protected String getDirecao() {
+        return this.direcao;
+    }
+
+    //Declarando métodos set --------------------------------------------------------------------------------
+    protected void setNome(String nome){
+        this.nome = nome;
+    }
+
+    protected void setDirecao(String direcao){
+        this.direcao = direcao;
+    }
+
+
+    //Declarando métodos para mover o robo e para exibir a posição atual -------------------------------------------------------------
+    protected void mover (int deltaX, int deltaY){
+        this.posicaoX = this.posicaoX + deltaX;
+        this.posicaoY = this.posicaoY + deltaY;
+    }
+
+    protected void exibirPosicao(){
         System.out.println("Posição atual de" + ": " + this.nome + "(" + this.posicaoX + ", " + this.posicaoY + ")");
+    }
+
+    protected void identificarObstaculo(){
     }
     
 }
