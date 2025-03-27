@@ -4,7 +4,7 @@ private class Ambiente
 {
     private int largura;
     private int altura;
-    private ArrayList<Robo> hangar;
+    public static ArrayList<Robo> hangar;
 
     //contrutor
     

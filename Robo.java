@@ -60,7 +60,9 @@ public class Robo {
         System.out.println("Posição atual de" + ": " + this.nome + "(" + this.posicaoX + ", " + this.posicaoY + ")");
     }
 
+    //Declarando método de identificação de obstáculos
     protected void identificarObstaculo(){
+        Ambiente.hangar.forEach(robo -> System.out.println("Robo: " + robo.getNome() + " posição (" + robo.getPosX() + ", " + robo.getPosY()+")"));
     }
     
 }
