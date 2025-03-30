@@ -1,18 +1,17 @@
-public class RoboAereo extends Robo{
+public class RoboAereo extends Robo {
 
-    //Atributos adicionais
+    // Atributos adicionais
     protected int altitude;
     protected int altitudeMaxima;
 
-    //Declarando construtor do RoboAereo
+    // Declarando construtor do RoboAereo
     protected RoboAereo(String nome, int posicaoX, int posicaoY, String direcao, int altitudeMaxima) {
         super(nome, posicaoX, posicaoY, direcao);
         this.altitude = 0;
         this.altitudeMaxima = altitudeMaxima;
     }
-    
-    
-    //Metodos adicionais para subir e para descer
+
+    // Métodos adicionais para subir e para descer
     protected void subir(int metros) {
         if (this.altitude + metros <= this.altitudeMaxima) {
             this.altitude += metros;
@@ -28,11 +27,19 @@ public class RoboAereo extends Robo{
             System.out.println("O robô já está no solo!");
         }
     }
-    
-    //fazendo override para usar como default a exibição da posição incluindo a altitude
+
+    // Métodos Getters
+    public int getAltitude() {
+        return this.altitude;
+    }
+
+    public int getAltitudeMaxima() {
+        return this.altitudeMaxima;
+    }
+
+    // Fazendo override para usar como default a exibição da posição incluindo a altitude
     @Override
     protected void exibirPosicao() {
         System.out.println(this.nome + " está em: (" + this.posicaoX + ", " + this.posicaoY + ", Altitude: " + this.altitude + ")");
     }
 }
-
