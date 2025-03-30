@@ -12,7 +12,7 @@ public class RoboAereo extends Robo{
     }
     
     
-    //Metodos adicionais
+    //Metodos adicionais para subir e para descer
     protected void subir(int metros) {
         if (this.altitude + metros <= this.altitudeMaxima) {
             this.altitude += metros;
@@ -28,7 +28,8 @@ public class RoboAereo extends Robo{
             System.out.println("O robô já está no solo!");
         }
     }
-
+    
+    //fazendo override para usar como default a exibição da posição incluindo a altitude
     @Override
     protected void exibirPosicao() {
         System.out.println(this.nome + " está em: (" + this.posicaoX + ", " + this.posicaoY + ", Altitude: " + this.altitude + ")");
