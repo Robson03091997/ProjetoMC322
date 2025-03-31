@@ -7,6 +7,12 @@ public class RoboTerrestre extends Robo{
         this.velocidadeMaxima = velocidadeMaxima;
     }
 
+    @overload
+    protected RoboTerrestre(){
+        super();
+        this.velocidadeMaxima = 20;
+    }
+
     //Declarando método get para a velocidade máxima
 
     protected int getVelocidadeMaxima(){
