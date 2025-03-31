@@ -14,9 +14,8 @@ public class Robo {
         Robo.numeroDeRobos++;
     }
 
-    @overload
     protected Robo(){
-        this.nome = "Robo"+toString(Robo.numeroDeRobos);
+        this.nome = "Robo" + String.valueOf(Robo.numeroDeRobos);
         this.posicaoX = 0;
         this.posicaoY = 0;
         this.direcao = "Não definida";

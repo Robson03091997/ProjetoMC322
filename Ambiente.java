@@ -1,21 +1,22 @@
 import java.util.ArrayList;
 
-private class Ambiente
+public class Ambiente
 {
     private int largura;
     private int altura;
-    public static ArrayList<Robo> hangar;
+    private int alturaMaxima;
+    public static ArrayList<Robo> hangar = new ArrayList<>();
 
-    //contrutor
+    //construtor
     
-    private Ambiente(int largura, int altura){
+    public Ambiente(int largura, int altura, int alturaMaxima){
         this.largura = largura;
         this.altura = altura;
     }
 
     //metodos
 
-    private boolean dentroDosLimites(int x, int y, int z){
+    public boolean dentroDosLimites(int x, int y, int z){
         if( (x >= 0) && (x < largura) && (y >= 0) && (y < altura) && (z < alturaMaxima)){
 
             return true;            
@@ -28,8 +29,8 @@ private class Ambiente
         }
     }
 
-    private void adicionarRobo(Robo robo){
-
+    public void adicionarRobo(Robo robo){
+        hangar.add(robo);
     }
 
 }

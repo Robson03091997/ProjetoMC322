@@ -1,17 +1,20 @@
 public class RoboColheitadera extends RoboTerrestre {
+    /*Robo de colheita generalista, ele tem apenas um atributo especifico que sinaliza se suas foices de colheita estão ativas. */
     private boolean foice;
 
+    //Declarando métodos construtores, um método default e outro com maior liberdade de parâmetros
     public RoboColheitadera(String nome, int posicaoX, int posicaoY, String direcao, int velocidadeMaxima, boolean foice){
         super(nome, posicaoX, posicaoY, direcao, velocidadeMaxima);
         this.foice = foice;
     }
 
-    @overload
     public RoboColheitadera(){
         super();
         this.foice = false;
     }
+    
 
+    //Declarando método get e interruptor de Foice, foi escolhido um interruptor nesse caso, pois só há duas possibilidades.
     private boolean getFoice(){
         return this.foice;
     }
@@ -25,6 +28,10 @@ public class RoboColheitadera extends RoboTerrestre {
         }
     }
 
+    /*Métodos de inicio de colheita, em que eles iniciam se movimentando para a posição inicial de colheita com o equipamento desligado
+    em seguida ativa o equipamento e inicia a colheita. No método com menor quantidade de parâmetros ele colhe o ambiente inteiro
+    enquanto o com maior quantidade de parâmetros permite escolha de velocidade, e região de colheita
+    */
     protected void colhePlantacao(int largura, int altura){
         if (foice){
             interruptorFoice();
@@ -40,16 +47,12 @@ public class RoboColheitadera extends RoboTerrestre {
             else {
                 this.mover(0, 0);
             }
-            if (Ambiente.dentroDosLimites(this.getPosX(), this.getPosY() + 1, 0)){
-                this.mover(0, 1);
-            }
-            else break;
+            this.mover(0, 1);
         }
         interruptorFoice();
     }
 
-    @overload
-    protected void preparaSolo(int posIniX, int posIniY, int posFimX, int posFimY, int velocidade, boolean arado, boolean grades, boolean subsolador){
+    protected void preparaSolo(int posIniX, int posIniY, int posFimX, int posFimY, int velocidade){
         if (foice){
             interruptorFoice();
         }
@@ -62,10 +65,7 @@ public class RoboColheitadera extends RoboTerrestre {
             else {
                 this.mover(posIniX, 0, velocidade);
             }
-            if (Ambiente.dentroDosLimites(this.getPosX(), this.getPosY() + 1, 0)){
-                this.mover(0, 1, velocidade);
-            }
-            else break;
+            this.mover(0, 1, velocidade);
         }
         interruptorFoice();
     }

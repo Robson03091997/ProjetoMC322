@@ -7,7 +7,7 @@ public class RoboTerrestre extends Robo{
         this.velocidadeMaxima = velocidadeMaxima;
     }
 
-    @overload
+    //Declarando um método construtor com overload para o caso default/sem conhecimento de uso
     protected RoboTerrestre(){
         super();
         this.velocidadeMaxima = 20;
@@ -21,15 +21,13 @@ public class RoboTerrestre extends Robo{
 
     //Declarando os métodos de mover do RoboTerrestre, tomando cuidado para não permitir o uso do método da classe mãe para que não se mova sem velocidade definida
     //fazendo override para usar como default a metade da velocidade máxima
-    @override
     protected void mover (int deltaX, int deltaY){
         this.posicaoX = posicaoX + deltaX;
         this.posicaoY = posicaoY + deltaY;
-        System.out.printf("Se movendo para (%d, %d) com velocidade %f", posicaoX, posicaoY, (velocidadeMaxima/2));
+        System.out.printf("Se movendo para (%d, %d) com velocidade %.2f\n", posicaoX, posicaoY, ((float) velocidadeMaxima/2));
     }
 
 
-    @overload
     protected void mover (int deltaX, int deltaY, int velocidade){
         if (velocidadeMaxima >= velocidade) {
             this.posicaoX = this.posicaoX + deltaX;
