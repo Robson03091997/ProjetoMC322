@@ -25,6 +25,10 @@ public class Main {
         robo2.exibirPosicao();
         robo3.exibirPosicao();
         robo4.exibirPosicao();
+        Sensor sensor1 = new SensorProximidade(3);
+        robo1.setLimiteNumSensores(10);
+        robo1.adicionarSensor(sensor1);
+        robo1.sensores.get(0).monitorar();
     }
     
 }

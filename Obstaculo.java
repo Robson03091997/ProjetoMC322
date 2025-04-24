@@ -19,6 +19,33 @@ public class Obstaculo {
         return this.tipo;
     }
 
+    public int getX(){
+        return this.x;
+    }
+
+    public int getX1(){
+        return this.x1;
+    
+    }
+
+    public int getY(){
+        return this.y;
+    }
+
+    public int getY1(){
+        return this.y1;
+    
+    }
+
+    public int getZ(){
+        return this.z;
+    }
+
+    public int getZ1(){
+        return this.z1;
+    
+    }
+
     public boolean bloqueiaPassagem(int posicaoX, int posicaoY, int posicaoZ){
         if (posicaoX >= this.x && posicaoX <= this.x1){
             if (posicaoY >= this.y && posicaoY <= this.y1){

@@ -7,7 +7,7 @@ public class Robo {
     protected String direcao;
     protected int limiteNumSensores;
     public static int numeroDeRobos = 0;
-    public static ArrayList<Sensor> sensores = new ArrayList<>();
+    public ArrayList<Sensor> sensores = new ArrayList<>();
 
     //declarando construtores ------------------------------------------------------
     protected Robo(String nome, int posicaoX, int posicaoY, String direcao){
