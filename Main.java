@@ -9,26 +9,15 @@ public class Main {
         ambiente.adicionarRobo(robo2);
         ambiente.adicionarRobo(robo3);
         ambiente.adicionarRobo(robo4);
-        robo1.exibirPosicao();
-        robo2.exibirPosicao();
-        robo3.exibirPosicao();
-        robo4.exibirPosicao();
-        robo1.mover(-10, -10, 50);
-        robo1.exibirPosicao();
-        robo1.mover(15, 15, 110);
-        robo2.mover(1,1);
-        robo2.exibirPosicao();
-        robo2.mover(-7, -7);
-        robo3.preparaSolo(100, 100);
-        robo4.colhePlantacao(50, 50);
-        robo1.exibirPosicao();
-        robo2.exibirPosicao();
-        robo3.exibirPosicao();
-        robo4.exibirPosicao();
         Sensor sensor1 = new SensorProximidade(3);
         robo1.setLimiteNumSensores(10);
         robo1.adicionarSensor(sensor1);
         robo1.sensores.get(0).monitorar();
+
+        // Iniciando menu interativo
+        System.out.println("Bem vindo(a) ao simulador de robôs");
+        System.out.println("Selecione o ambiente escolhido\n Ambiente 1 -> Digite 1\n Ambiente 2 -> Digite 2");
+        
     }
     
 }

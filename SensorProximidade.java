@@ -14,7 +14,7 @@ public class SensorProximidade extends Sensor {
     public void monitorar() {
         double menorDistancia = -1;
 
-        for (Obstaculo obstaculo : Ambiente.obstaculos) {
+        for (Obstaculo obstaculo : Ambiente.restricoes) {
             double distancia = calcularDistancia(robo, obstaculo);
             if (distancia <= getAlcance()) {
                 if (menorDistancia == -1 || distancia < menorDistancia) {

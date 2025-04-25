@@ -24,4 +24,18 @@ class RoboJato extends RoboAereo {
     public int getVelocidade() {
         return this.velocidade;
     }
+
+    public String toString(){
+        String out = "";
+        out += "Robo" + getNome();
+        out += "\nPosicao: (" + getPosX() + ", " + getPosY() + ", " + getAltitude() + ")\n direcao: " + getDirecao() + " altitude máxima: " + getAltitudeMaxima() + " velocidade: " + getVelocidade();
+        out += "\n Lista de Sensores ------------------------------------------------------------";
+        out += "Número Limite de sensores: " + getLimiteNumSensores() + "Número de Sensores Conectados: " + sensores.size();
+        out += "\n";
+        for (int i = 0; i < sensores.size(); i++){
+            out += sensores.get(i);
+            out += "\n";
+        }
+        return out;
+    }
 }

@@ -65,5 +65,13 @@ public class Obstaculo {
         }
     }
 
+    public String toString(){
+        String out = "";
+        out += "Tipo de obstáculo: "+ getTipo() +" posicao inicial: (" + getX() + ", " + getY() + ", " + getZ() +")";
+        out += "\nlargura: " +(getX()+getX1()) + " comprimento: " + (getY()+getY1()) + " altura: " + (getZ()+getZ1());
+        out += "\n";
+        return out;
+    }
+
 
 }

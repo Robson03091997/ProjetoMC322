@@ -4,6 +4,7 @@ public class Robo {
     protected String nome;
     protected int posicaoX;
     protected int posicaoY;
+    protected int posicaoZ;
     protected String direcao;
     protected int limiteNumSensores;
     public static int numeroDeRobos = 0;
@@ -91,13 +92,24 @@ public class Robo {
 
     //Declarando método de identificação de obstáculos
     protected void identificarObstaculo(){
-        Ambiente.hangar.forEach(robo -> System.out.println("Robo: " + robo.getNome() + " posição (" + robo.getPosX() + ", " + robo.getPosY()+")"));
+        Ambiente.frota.forEach(robo -> System.out.println("Robo: " + robo.getNome() + " posição (" + robo.getPosX() + ", " + robo.getPosY()+")"));
     }
     
     protected void adicionarSensor(Sensor sensor){
         if (sensores.size() < limiteNumSensores){
             sensores.add(sensor);
         }
+    }
+
+    protected String ativaInativa(boolean resposta){
+        String out = "";
+        if (resposta){
+            out = "ativa";
+        }
+        else {
+            out = "inativa";
+        }
+        return out;
     }
 
     protected void removerSensor(Sensor sensor){
@@ -109,5 +121,19 @@ public class Robo {
             this.removerSensor(sensor);
             robo.adicionarSensor(sensor);
         }
+    }
+
+    public String toString(){
+        String out = "";
+        out += "Robo" + getNome();
+        out += "\nPosicao: (" + getPosX() + ", " + getPosY() + ", 0), direcao: " + getDirecao();
+        out += "\n Lista de Sensores ------------------------------------------------------------";
+        out += "Número Limite de sensores: " + getLimiteNumSensores() + "Número de Sensores Conectados: " + sensores.size();
+        out += "\n";
+        for (int i = 0; i < sensores.size(); i++){
+            out += sensores.get(i);
+            out += "\n";
+        }
+        return out;
     }
 }
