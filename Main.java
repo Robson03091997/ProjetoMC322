@@ -1,4 +1,16 @@
 import java.util.Scanner;
+
+import ambientes.Ambiente;
+import ambientes.obstaculos.TipoObstaculo;
+import ambientes.robos.Robo;
+import ambientes.robos.robosaereos.RoboAereo;
+import ambientes.robos.robosaereos.RoboJato;
+import ambientes.robos.robosterrestres.RoboColheitadera;
+import ambientes.robos.robosterrestres.RoboPreparaSolo;
+import ambientes.robos.robosterrestres.RoboTerrestre;
+import ambientes.sensores.Sensor;
+import ambientes.sensores.SensorProximidade;
+
 import java.util.ArrayList;
 public class Main {
 
@@ -20,10 +32,14 @@ public class Main {
             System.err.println("Formato do número errado ou um não número foi usado, tente novamente!");
             menuAmbiente(ecossistema);
         }
-        if (escolhaInt != 0){
+        if (escolhaInt > 0 && escolhaInt < ecossistema.size()){
             menuOpcoesAmbiente((escolhaInt-1), ecossistema);
         }
-        else {
+        else if (escolhaInt == 0){
+            System.out.println("Obrigado por usar nosso simulador!");;
+        }
+        else if (escolhaInt < 0 && escolhaInt > ecossistema.size()){
+            System.out.println("Valor de ambiente não disponível, tente novamente!");
             menuAmbiente(ecossistema);
         }
         input.close();
@@ -84,6 +100,9 @@ public class Main {
                 
             case 6:
                 System.out.println("Digite o número do obstáculo a ser removido");
+                for (int i = 0; i < ecossistema.get(opcao).getRestricoes().size(); i++){
+                    System.out.println("("+(i+1)+")"+ecossistema.get(opcao).getRestricoes().get(i));
+                }
                 int obstaculoRemover = (Integer.parseInt(input.nextLine())-1);
                 ecossistema.get(opcao).removerObstaculo(obstaculoRemover);
                 menuOpcoesAmbiente(opcao, ecossistema);
@@ -156,6 +175,7 @@ public class Main {
 
     public static void menuRobo(Robo robo, Ambiente ambiente, ArrayList<Ambiente> ecossistema){
         Scanner input = new Scanner(System.in);
+        robo.exibirPosicao();
         System.out.println("Para mover o robo -> Digite 1");
         System.out.println("Listar sensores -> Digite 2");
         System.out.println("Ativar/Desativar sensor -> Digite 3");
@@ -165,7 +185,7 @@ public class Main {
         input.nextLine();
         switch (usaRobo) {
             case 1:
-                System.out.println("");
+                System.out.println("Digite para que posição você quer que o robô se mova no formato X Y Z");
                 String moveRobo = input.nextLine();
                 String[] posicoes = moveRobo.split("\\s+");
                 robo.mover(Integer.parseInt(posicoes[0]), Integer.parseInt(posicoes[1]), Integer.parseInt(posicoes[2]));
@@ -217,6 +237,8 @@ public class Main {
         RoboPreparaSolo robo3 = new RoboPreparaSolo("robo3", 60, 30, "Oeste", 40, 1);
         RoboColheitadera robo4 = new RoboColheitadera();
         RoboJato robo5 = new RoboJato("jato", 3, 26, "NORTE", 100, 200);
+        ambiente.adicionarObstaculo(10, 33, 0, 10, 10, 10, TipoObstaculo.PREDIO);
+        ambiente.adicionarObstaculo(50, 0, 80, 1, 99, 5, TipoObstaculo.FIACAO);
         ambiente.adicionarRobo(robo1);
         ambiente.adicionarRobo(robo2);
         ambiente.adicionarRobo(robo3);
@@ -229,5 +251,4 @@ public class Main {
         // Iniciando menu interativo
         Main.menuAmbiente(ecossistema);
     }
-    
 }
