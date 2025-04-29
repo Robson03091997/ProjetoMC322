@@ -1,20 +1,14 @@
 public class SensorProximidade extends Sensor {
-    private Robo robo;
 
     public SensorProximidade(double alcance) {
         super(alcance);
-    }
-
-    public SensorProximidade(double alcance, Robo robo) {
-        super(alcance);
-        this.robo = robo;
     }
 
     @Override
     public void monitorar() {
         double menorDistancia = -1;
 
-        for (Obstaculo obstaculo : Ambiente.restricoes) {
+        for (Obstaculo obstaculo : this.getRobo().getAmbiente().getRestricoes()) {
             double distancia = calcularDistancia(robo, obstaculo);
             if (distancia <= getAlcance()) {
                 if (menorDistancia == -1 || distancia < menorDistancia) {
@@ -49,13 +43,5 @@ public class SensorProximidade extends Sensor {
 
     private int clamp(int valor, int min, int max) {
         return Math.max(min, Math.min(valor, max));
-    }
-
-    public void setRobo(Robo robo){
-        this.robo = robo;
-    }
-
-    public Robo getRobo(){
-        return this.robo;
     }
 }

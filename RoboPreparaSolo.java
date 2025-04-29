@@ -133,11 +133,11 @@ public class RoboPreparaSolo extends RoboTerrestre{
 
     public String toString(){
         String out = "";
-        out += "Robo" + getNome();
-        out += "\nPosicao: (" + getPosX() + ", " + getPosY() + ", 0), direcao: " + getDirecao() + "velocidade máxima: " + getVelocidadeMaxima();
-        out += "\n arado: " + ativaInativa(arado) + " grades: " + ativaInativa(grades) + " subsolador: " + ativaInativa(subsolador);
-        out += "\n Lista de Sensores ------------------------------------------------------------";
-        out += "Número Limite de sensores: " + getLimiteNumSensores() + "Número de Sensores Conectados: " + sensores.size();
+        out += "Robo " + getNome();
+        out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", 0), direcao: " + getDirecao() + " velocidade máxima: " + getVelocidadeMaxima();
+        out += "\n--arado: " + ativaInativa(arado) + " grades: " + ativaInativa(grades) + " subsolador: " + ativaInativa(subsolador);
+        out += "\n--Lista de Sensores ------------------------------------------------------------\n";
+        out += "--Número Limite de sensores: " + getLimiteNumSensores() + " Número de Sensores Conectados: " + sensores.size();
         out += "\n";
         for (int i = 0; i < sensores.size(); i++){
             out += sensores.get(i);

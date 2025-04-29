@@ -1,5 +1,6 @@
 public abstract class Sensor{
-    private double alcance;
+    protected double alcance;
+    protected Robo robo;
     
 
     Sensor(double alcance){
@@ -10,5 +11,20 @@ public abstract class Sensor{
         return this.alcance;
     }
 
+    public void setRobo(Robo robo){
+        this.robo = robo;
+    }
+
+    public Robo getRobo(){
+        return this.robo;
+    }
+
     public abstract void monitorar();
+
+    public String toString(){
+        String out = "";
+        out += "---"+super.toString();
+        out += " alcance: "+this.getAlcance();
+        return out;
+    }
 }

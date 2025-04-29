@@ -4,9 +4,10 @@ public class Robo {
     protected String nome;
     protected int posicaoX;
     protected int posicaoY;
-    protected int posicaoZ;
+    protected int posicaoZ = 0;
     protected String direcao;
     protected int limiteNumSensores;
+    private Ambiente ambiente;
     public static int numeroDeRobos = 0;
     public ArrayList<Sensor> sensores = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class Robo {
     }
 
     protected Robo(){
-        this.nome = "Robo" + String.valueOf(Robo.numeroDeRobos);
+        this.nome = "Robo" + String.valueOf(Robo.numeroDeRobos+1);
         this.posicaoX = 0;
         this.posicaoY = 0;
         this.direcao = "Não definida";
@@ -79,11 +80,19 @@ public class Robo {
         }
     }
 
+    protected void setAmbiente(Ambiente ambiente){
+        this.ambiente = ambiente;
+    }
+
+    protected Ambiente getAmbiente(){
+        return this.ambiente;
+    }
+
 
     //Declarando métodos para mover o robo e para exibir a posição atual -------------------------------------------------------------
-    protected void mover (int deltaX, int deltaY){
-        this.posicaoX = this.posicaoX + deltaX;
-        this.posicaoY = this.posicaoY + deltaY;
+    protected void mover (int X, int Y, int Z){
+        this.posicaoX = X;
+        this.posicaoY = Y;
     }
 
     protected void exibirPosicao(){
@@ -92,12 +101,13 @@ public class Robo {
 
     //Declarando método de identificação de obstáculos
     protected void identificarObstaculo(){
-        Ambiente.frota.forEach(robo -> System.out.println("Robo: " + robo.getNome() + " posição (" + robo.getPosX() + ", " + robo.getPosY()+")"));
+        ambiente.getFrota().forEach(robo -> System.out.println("Robo: " + robo.getNome() + " posição (" + robo.getPosX() + ", " + robo.getPosY()+")"));
     }
     
     protected void adicionarSensor(Sensor sensor){
         if (sensores.size() < limiteNumSensores){
             sensores.add(sensor);
+            sensor.setRobo(this);
         }
     }
 
@@ -123,12 +133,16 @@ public class Robo {
         }
     }
 
+    protected ArrayList<Sensor> getSensores(){
+        return this.sensores;
+    }
+
     public String toString(){
         String out = "";
-        out += "Robo" + getNome();
-        out += "\nPosicao: (" + getPosX() + ", " + getPosY() + ", 0), direcao: " + getDirecao();
-        out += "\n Lista de Sensores ------------------------------------------------------------";
-        out += "Número Limite de sensores: " + getLimiteNumSensores() + "Número de Sensores Conectados: " + sensores.size();
+        out += "Robo " + getNome();
+        out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", 0), direcao: " + getDirecao();
+        out += "\n--Lista de Sensores ------------------------------------------------------------\n";
+        out += "--Número Limite de sensores: " + getLimiteNumSensores() + " Número de Sensores Conectados: " + sensores.size();
         out += "\n";
         for (int i = 0; i < sensores.size(); i++){
             out += sensores.get(i);

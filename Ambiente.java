@@ -6,8 +6,8 @@ public class Ambiente
     private final int comprimento;
     private int altura;
     private String nome;
-    public static ArrayList<Robo> frota = new ArrayList<>();
-    public static ArrayList<Obstaculo> restricoes = new ArrayList<>();
+    private ArrayList<Robo> frota = new ArrayList<>();
+    private ArrayList<Obstaculo> restricoes = new ArrayList<>();
 
     //construtor
     
@@ -44,6 +44,14 @@ public class Ambiente
         this.altura = altura;
     }
 
+    public ArrayList<Robo> getFrota(){
+        return this.frota;
+    }
+
+    public ArrayList<Obstaculo> getRestricoes(){
+        return this.restricoes;
+    }
+
     public boolean dentroDosLimites(int x, int y, int z){
         if( (x >= 0) && (x < largura) && (y >= 0) && (y < comprimento) && (z < altura)){
 
@@ -68,10 +76,26 @@ public class Ambiente
 
     public void adicionarRobo(Robo robo){
         frota.add(robo);
+        robo.setAmbiente(this);
     }
 
     public void removerRobo(Robo robo){
         frota.remove(robo);
+    }
+
+    public void removerRobo(String robo){
+        int verificaRemocao = 0;
+        for (int i = 0; i < frota.size(); i++){
+            if (frota.get(i).getNome().equals(robo)){
+                System.out.println("Robo "+frota.get(i).getNome()+" removido.");
+                frota.remove(i);
+                verificaRemocao = 1;
+                break;
+            }
+        }
+        if (verificaRemocao == 0){
+            System.out.println("Robo a ser removido não foi encontrado.");
+        }
     }
 
 
@@ -83,17 +107,26 @@ public class Ambiente
         restricoes.remove(obstaculo);
     }
 
+    public void removerObstaculo(int obstaculo){
+        if (restricoes.size() > obstaculo && obstaculo > -1){
+            restricoes.remove(obstaculo);
+        }
+        else{
+            System.out.println("Não há esse obstáculo no ambiente.");
+        }
+    }
+
     public String toString(){
         String out = "";
         out += "Ambiente " + getNome();
-        out += "\n Comprimento: " + getComprimento() + "Largura: " + getLargura() + "Altura: " + getAltura();
+        out += "\nComprimento: " + getComprimento() + " Largura: " + getLargura() + " Altura: " + getAltura();
         out += "\nLista de Robôs presentes no ambiente --------------------------------------------\n";
         for (int i = 0; i < frota.size(); i++){
-            out += frota.get(i) + "\n";
+            out += "-"+frota.get(i) + "\n";
         }
         out += "Lista de Obstáculos presentes no ambiente -----------------------------------------\n";
         for (int i = 0; i < restricoes.size(); i++){
-            out += restricoes.get(i) + "\n";
+            out += "    "+restricoes.get(i) + "\n";
         }
         return out;
     }
