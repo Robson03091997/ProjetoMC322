@@ -46,15 +46,15 @@ public class Robo {
         return this.nome;
     }
 
-    public int getPosX() {
+    public int getX() {
         return this.posicaoX;
     }
 
-    public int getPosY() {
+    public int getY() {
         return this.posicaoY;
     }
 
-    public int getPosZ() {
+    public int getZ() {
         return this.posicaoZ;
     }
 

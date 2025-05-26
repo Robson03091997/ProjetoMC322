@@ -1,26 +1,43 @@
 package ambientes;
 import java.util.ArrayList;
-
-import ambientes.obstaculos.Obstaculo;
-import ambientes.obstaculos.TipoObstaculo;
-import ambientes.robos.Robo;
+import ambientes.entidade.*;
+import ambientes.obstaculos.*;
+import ambientes.robos.*;
 
 public class Ambiente
 {
     private final int largura;
-    private final int comprimento;
+    private final int profundidade;
     private int altura;
     private String nome;
     private ArrayList<Robo> frota = new ArrayList<>();
     private ArrayList<Obstaculo> restricoes = new ArrayList<>();
+    private ArrayList<Entidade> entidades = new ArrayList<>();
+    private TipoEntidade[][][] mapa;
+    private TipoEntidade vazio = TipoEntidade.VAZIO;
 
     //construtor
     
-    public Ambiente(String nome, int largura, int comprimento, int altura){
+    public Ambiente(String nome, int largura, int profundidade, int altura){
         this.largura = largura;
-        this.comprimento = comprimento;
+        this.profundidade = profundidade;
         this.altura = altura;
         this.nome = nome;
+        this.inicializaMapa();
+    }
+
+    private TipoEntidade[][][] inicializaMapa(){
+        mapa = new TipoEntidade[largura][profundidade][altura];
+        for (int x = 0; x < largura; x++) {
+            for (int y = 0; y < profundidade; y++) {
+                for (int z = 0; z < altura; z++) {
+                    mapa[x][y][z] = this.vazio;
+                }
+            }
+        }
+        for (int i = 0; i < entidades.size(); i++){
+            mapa[entidades.get(i).getX()][entidades.get(i).getY()][entidades.get(i).getZ()] = entidades.get(i).getTipoEntidade();
+        }
     }
 
     //metodos
@@ -37,8 +54,8 @@ public class Ambiente
         return this.largura;
     }
 
-    public int getComprimento(){
-        return this.comprimento;
+    public int getProfundidade(){
+        return this.profundidade;
     }
 
     public int getAltura(){
@@ -58,7 +75,7 @@ public class Ambiente
     }
 
     public boolean dentroDosLimites(int x, int y, int z){
-        if( (x >= 0) && (x < largura) && (y >= 0) && (y < comprimento) && (z < altura)){
+        if( (x >= 0) && (x < largura) && (y >= 0) && (y < profundidade) && (z < altura)){
 
             return true;            
         }
@@ -104,8 +121,8 @@ public class Ambiente
     }
 
 
-    public void adicionarObstaculo(int x, int y, int z, int largura, int comprimento, int altura, TipoObstaculo tipo){
-        Obstaculo obstaculo = new Obstaculo(x, y, z, largura, comprimento, altura, tipo);
+    public void adicionarObstaculo(int x, int y, int z, int largura, int profundidade, int altura, TipoObstaculo tipo){
+        Obstaculo obstaculo = new Obstaculo(x, y, z, largura, profundidade, altura, tipo);
         restricoes.add(obstaculo);
     }
 
@@ -122,10 +139,29 @@ public class Ambiente
         }
     }
 
+    public void adicionarEntidade(Entidade e){
+        entidades.add(e);
+    }
+
+    public void removerEntidade(Entidade entidade){
+        this.mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = this.vazio;
+        entidades.remove(entidade);
+    }
+
+    public void removerEntidade(int entidade){
+        if (entidades.size() > entidade && entidade > -1){
+            this.mapa[entidades.get(entidade).getX()][entidades.get(entidade).getY()][entidades.get(entidade).getZ()] = this.vazio;
+            restricoes.remove(entidade);
+        }
+        else{
+            System.out.println("Não há essa entidade no ambiente.");
+        }
+    }
+
     public String toString(){
         String out = "";
         out += "Ambiente " + getNome();
-        out += "\nComprimento: " + getComprimento() + " Largura: " + getLargura() + " Altura: " + getAltura();
+        out += "\nprofundidade: " + getProfundidade() + " Largura: " + getLargura() + " Altura: " + getAltura();
         out += "\nLista de Robôs presentes no ambiente --------------------------------------------\n";
         for (int i = 0; i < frota.size(); i++){
             out += "-"+frota.get(i) + "\n";

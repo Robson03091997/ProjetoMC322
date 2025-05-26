@@ -1,5 +1,4 @@
 import java.util.Scanner;
-
 import ambientes.Ambiente;
 import ambientes.obstaculos.TipoObstaculo;
 import ambientes.robos.Robo;
@@ -10,8 +9,8 @@ import ambientes.robos.robosterrestres.RoboPreparaSolo;
 import ambientes.robos.robosterrestres.RoboTerrestre;
 import ambientes.sensores.Sensor;
 import ambientes.sensores.SensorProximidade;
-
 import java.util.ArrayList;
+
 public class Main {
 
     //Métodos para o menu interativo ---------------------------------------------------
@@ -247,7 +246,6 @@ public class Main {
         Sensor sensor1 = new SensorProximidade(3);
         robo1.setLimiteNumSensores(10);
         robo1.adicionarSensor(sensor1);
-
         // Iniciando menu interativo
         Main.menuAmbiente(ecossistema);
     }
