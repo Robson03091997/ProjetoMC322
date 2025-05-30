@@ -10,6 +10,8 @@ import ambientes.robos.robosterrestres.RoboTerrestre;
 import ambientes.sensores.Sensor;
 import ambientes.sensores.SensorProximidade;
 import java.util.ArrayList;
+import ambientes.robos.RoboAvancado;
+import ambientes.Menu;
 
 public class Main {
 
@@ -226,27 +228,21 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        ArrayList<Ambiente> ecossistema = new ArrayList<Ambiente>();
-        Ambiente ambiente = new Ambiente("Ambiente 1", 100, 100, 100);
-        ecossistema.add(ambiente);
-        Ambiente ambiente1 = new Ambiente("Ambiente 2", 100, 100, 100);
-        ecossistema.add(ambiente1);
-        RoboTerrestre robo1 = new RoboTerrestre("robo1", 25, 25, "Norte", 100);
-        RoboAereo robo2 = new RoboAereo("falcao", 10, 10, "Leste", 80);
-        RoboPreparaSolo robo3 = new RoboPreparaSolo("robo3", 60, 30, "Oeste", 40, 1);
-        RoboColheitadera robo4 = new RoboColheitadera();
-        RoboJato robo5 = new RoboJato("jato", 3, 26, "NORTE", 100, 200);
-        ambiente.adicionarObstaculo(10, 33, 0, 10, 10, 10, TipoObstaculo.PREDIO);
-        ambiente.adicionarObstaculo(50, 0, 80, 1, 99, 5, TipoObstaculo.FIACAO);
-        ambiente.adicionarRobo(robo1);
-        ambiente.adicionarRobo(robo2);
-        ambiente.adicionarRobo(robo3);
-        ambiente.adicionarRobo(robo4);
-        ambiente.adicionarRobo(robo5);
-        Sensor sensor1 = new SensorProximidade(3);
-        robo1.setLimiteNumSensores(10);
-        robo1.adicionarSensor(sensor1);
-        // Iniciando menu interativo
-        Main.menuAmbiente(ecossistema);
+        // Criação do ambiente (feita uma única vez, não no menu)
+        Ambiente ambiente = new Ambiente("Ambiente de Teste", 10, 10, 5);
+        
+        // Criação do robô avançado (feita uma única vez, não no menu)
+        RoboAvancado robo = new RoboAvancado("R1", 0, 0, "Norte");
+        
+        // Adiciona alguns sensores ao robô
+        robo.adicionarSensor(new SensorProximidade(5.0));
+        
+        // Adiciona o robô ao ambiente
+        ambiente.adicionarRobo(robo);
+        ambiente.adicionarEntidade(robo);
+        
+        // Cria e exibe o menu
+        Menu menu = new Menu(ambiente, robo);
+        menu.exibirMenu();
     }
 }

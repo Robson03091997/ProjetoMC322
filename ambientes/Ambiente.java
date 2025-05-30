@@ -75,11 +75,11 @@ public class Ambiente
         return this.restricoes;
     }
 
-    public boolean dentroDosLimites(int x, int y, int z) throws ColisaoException {
+    public boolean dentroDosLimites(int x, int y, int z) throws ForaDosLimitesException {
         if ((x >= 0) && (x < largura) && (y >= 0) && (y < profundidade) && (z >= 0) && (z < altura)) {
             return true;
         } else {
-            throw new ColisaoException("Posição (" + x + ", " + y + ", " + z + ") está fora dos limites do ambiente");
+            throw new ForaDosLimitesException("Posição (" + x + ", " + y + ", " + z + ") está fora dos limites do ambiente");
         }
     }
 
