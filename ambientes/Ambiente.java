@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import ambientes.entidade.*;
 import ambientes.obstaculos.*;
 import ambientes.robos.*;
+import ambientes.sensores.*;
 
 public class Ambiente
 {
@@ -26,7 +27,7 @@ public class Ambiente
         this.inicializaMapa();
     }
 
-    private TipoEntidade[][][] inicializaMapa(){
+    private void inicializaMapa(){
         mapa = new TipoEntidade[largura][profundidade][altura];
         for (int x = 0; x < largura; x++) {
             for (int y = 0; y < profundidade; y++) {
@@ -36,7 +37,7 @@ public class Ambiente
             }
         }
         for (int i = 0; i < entidades.size(); i++){
-            mapa[entidades.get(i).getX()][entidades.get(i).getY()][entidades.get(i).getZ()] = entidades.get(i).getTipoEntidade();
+            mapa[entidades.get(i).getX()][entidades.get(i).getY()][entidades.get(i).getZ()] = entidades.get(i).getTipo();
         }
     }
 
@@ -74,26 +75,92 @@ public class Ambiente
         return this.restricoes;
     }
 
-    public boolean dentroDosLimites(int x, int y, int z){
-        if( (x >= 0) && (x < largura) && (y >= 0) && (y < profundidade) && (z < altura)){
-
-            return true;            
-        }
-        else{
-
-            System.out.println("fora dos limites");
-
-            return false;
+    public boolean dentroDosLimites(int x, int y, int z) throws ColisaoException {
+        if ((x >= 0) && (x < largura) && (y >= 0) && (y < profundidade) && (z >= 0) && (z < altura)) {
+            return true;
+        } else {
+            throw new ColisaoException("Posição (" + x + ", " + y + ", " + z + ") está fora dos limites do ambiente");
         }
     }
 
-    public boolean detectarColisoes(int x, int y, int z) {
-        for (int i = 0; i < Obstaculo.numeroDeObstaculos; i++){
-            if ((restricoes.get(i)).bloqueiaPassagem(x, y, z)){
-                return true;
+    public boolean estaOcupado(int x, int y, int z) throws ColisaoException {
+        if (!dentroDosLimites(x, y, z)) {
+            throw new ColisaoException("Posição fora dos limites");
+        }
+        return mapa[x][y][z] != TipoEntidade.VAZIO;
+    }
+
+    public void moverEntidade(Entidade e, int novoX, int novoY, int novoZ) throws ColisaoException {
+        if (!dentroDosLimites(novoX, novoY, novoZ)) {
+            throw new ColisaoException("Nova posição fora dos limites");
+        }
+        
+        if (estaOcupado(novoX, novoY, novoZ)) {
+            throw new ColisaoException("Posição de destino já está ocupada");
+        }
+
+        // Limpa posição atual
+        mapa[e.getX()][e.getY()][e.getZ()] = TipoEntidade.VAZIO;
+        
+        // Atualiza a posição se a entidade for um robô
+        if (e instanceof Robo) {
+            ((Robo) e).mover(novoX, novoY, novoZ);
+        }
+        
+        // Atualiza o mapa
+        mapa[novoX][novoY][novoZ] = e.getTipo();
+    }
+
+    public void executarSensores() {
+        for (Robo robo : frota) {
+            for (Sensor sensor : robo.getSensores()) {
+                sensor.monitorar();
             }
         }
-        return false;
+    }
+
+    public void verificarColisoes() throws ColisaoException {
+        for (Entidade e1 : entidades) {
+            for (Entidade e2 : entidades) {
+                if (e1 != e2 && 
+                    e1.getX() == e2.getX() && 
+                    e1.getY() == e2.getY() && 
+                    e1.getZ() == e2.getZ()) {
+                    throw new ColisaoException(
+                        "Colisão detectada entre " + e1.getDescricao() + " e " + e2.getDescricao()
+                    );
+                }
+            }
+        }
+    }
+
+    public void visualizarAmbiente() {
+        System.out.println("Ambiente " + nome + " (" + largura + "x" + profundidade + ")");
+        System.out.println("Legenda: [.] Vazio, [R] Robô, [O] Obstáculo");
+        
+        for (int y = profundidade - 1; y >= 0; y--) {
+            for (int x = 0; x < largura; x++) {
+                boolean posicaoVazia = true;
+                // Procura entidade em qualquer altura nesta posição x,y
+                for (int z = 0; z < altura; z++) {
+                    if (mapa[x][y][z] != TipoEntidade.VAZIO) {
+                        // Encontra a entidade correspondente para pegar sua representação
+                        for (Entidade e : entidades) {
+                            if (e.getX() == x && e.getY() == y && e.getZ() == z) {
+                                System.out.print("[" + e.getRepresentacao() + "]");
+                                posicaoVazia = false;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+                if (posicaoVazia) {
+                    System.out.print("[.]");
+                }
+            }
+            System.out.println();
+        }
     }
 
     public void adicionarRobo(Robo robo){
@@ -171,5 +238,17 @@ public class Ambiente
             out += "-"+restricoes.get(i) + "\n";
         }
         return out;
+    }
+
+    // Método de exemplo para verificar tipo de entidade em uma posição
+    public boolean isRoboNaPosicao(int x, int y, int z) {
+        if (!dentroDosLimites(x, y, z)) {
+            return false;
+        }
+        Entidade e = entidades.stream()
+            .filter(ent -> ent.getX() == x && ent.getY() == y && ent.getZ() == z)
+            .findFirst()
+            .orElse(null);
+        return e != null && e.getTipo() == TipoEntidade.ROBO;
     }
 }

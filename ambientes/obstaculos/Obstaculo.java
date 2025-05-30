@@ -1,5 +1,8 @@
 package ambientes.obstaculos;
-public class Obstaculo {
+import ambientes.entidade.Entidade;
+import ambientes.entidade.TipoEntidade;
+
+public class Obstaculo implements Entidade {
     private int x, y, z;
     private int x1, y1, z1;
     private TipoObstaculo tipo;
@@ -16,8 +19,28 @@ public class Obstaculo {
         Obstaculo.numeroDeObstaculos++;
     }
 
-    public TipoObstaculo getTipo() {
-        return this.tipo;
+    @Override
+    public TipoEntidade getTipo() {
+        return TipoEntidade.OBSTACULO;
+    }
+
+    @Override
+    public String getDescricao() {
+        return "Obstáculo do tipo " + this.tipo + " na posição (" + this.x + ", " + this.y + ", " + this.z + ")";
+    }
+
+    @Override
+    public char getRepresentacao() {
+        switch(this.tipo) {
+            case PAREDE: return 'P';
+            case ARVORE: return 'A';
+            case PREDIO: return 'E';
+            case BURACO: return 'B';
+            case TORRE: return 'T';
+            case FIACAO: return 'F';
+            case DEPOSITO: return 'D';
+            default: return 'O';
+        }
     }
 
     public int getX(){
