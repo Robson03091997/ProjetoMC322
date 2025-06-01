@@ -134,7 +134,7 @@ public class RoboPreparaSolo extends RoboTerrestre{
 
     public String toString(){
         String out = "";
-        out += "Robo " + getNome();
+        out += "Robo " + getId();
         out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", " +getPosZ() +"), direcao: " + getDirecao() + " velocidade máxima: " + getVelocidadeMaxima();
         out += "\n--arado: " + ativaInativa(arado) + " grades: " + ativaInativa(grades) + " subsolador: " + ativaInativa(subsolador);
         out += "\n--Lista de Sensores ------------------------------------------------------------\n";

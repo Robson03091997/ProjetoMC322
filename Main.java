@@ -4,6 +4,7 @@ import ambientes.obstaculos.TipoObstaculo;
 import ambientes.robos.Robo;
 import ambientes.robos.robosaereos.RoboAereo;
 import ambientes.robos.robosaereos.RoboJato;
+import ambientes.robos.robosaereos.RoboDrone;
 import ambientes.robos.robosterrestres.RoboColheitadera;
 import ambientes.robos.robosterrestres.RoboPreparaSolo;
 import ambientes.robos.robosterrestres.RoboTerrestre;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import ambientes.robos.RoboAvancado;
 import ambientes.Menu;
 import ambientes.entidade.Entidade;
+import ambientes.ColisaoException;
 
 public class Main {
 
@@ -92,7 +94,7 @@ public class Main {
             case 5:
                 System.out.println("Digite o nome do robo a ser removido");
                 for (Robo robo : ecossistema.get(opcao).getFrota()){
-                    System.out.println(robo.getNome() + "  ");
+                    System.out.println(robo.getId() + "  ");
                 }
                 String roboRemover = input.nextLine();
                 ecossistema.get(opcao).removerRobo(roboRemover);
@@ -141,12 +143,12 @@ public class Main {
             case 2:
                 System.out.println("Digite o nome do robo a ser selecionado");
                 for (Robo robo : ambiente.getFrota()){
-                    System.out.println(robo.getNome() + "  ");
+                    System.out.println(robo.getId() + "  ");
                 }
                 String selecionaRobo = input.nextLine();
                 int verifica = 0;
                 for (int i = 0; i < ambiente.getFrota().size(); i++){
-                    if (ambiente.getFrota().get(i).getNome().equals(selecionaRobo)){
+                    if (ambiente.getFrota().get(i).getId().equals(selecionaRobo)){
                         menuRobo(ambiente.getFrota().get(i), ambiente, ecossistema);
                         verifica = 1;
                     }
@@ -229,59 +231,114 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // 1. Inicialização do ambiente
-        Ambiente ambiente = new Ambiente("Ambiente de Simulação", 10, 10, 5);
-        
-        // 2. Criação dos robôs
-        RoboAvancado roboAvancado = new RoboAvancado("R1", 0, 0, "Norte");
-        RoboAvancado roboExplorador = new RoboAvancado("R2", 5, 5, "Sul");
-        
-        // 3. Configuração dos sensores
-        SensorProximidade sensorProx1 = new SensorProximidade(3.0);
-        SensorProximidade sensorProx2 = new SensorProximidade(5.0);
-        roboAvancado.adicionarSensor(sensorProx1);
-        roboExplorador.adicionarSensor(sensorProx2);
-        
-        // 4. Adição de obstáculos
-        ambiente.adicionarObstaculo(2, 2, 0, 2, 2, 3, TipoObstaculo.PREDIO);
-        ambiente.adicionarObstaculo(7, 7, 0, 1, 3, 2, TipoObstaculo.ARVORE);
-        
-        // 5. Adição dos robôs ao ambiente
+        System.out.println("=== Iniciando Testes do Sistema de Robôs ===\n");
+
+        // 1. Criação e configuração do ambiente
+        System.out.println("1. Teste de Criação de Ambiente");
+        Ambiente ambiente = new Ambiente("Ambiente de Testes", 10, 10, 5);
+        System.out.println("Ambiente criado com dimensões: " + ambiente.getLargura() + "x" + 
+                          ambiente.getProfundidade() + "x" + ambiente.getAltura());
+
+        // 2. Criação de diferentes tipos de robôs
+        System.out.println("\n2. Teste de Criação de Robôs");
+        RoboAvancado roboAvancado = new RoboAvancado("RA1", 0, 0, "Norte");
+        RoboTerrestre roboTerrestre = new RoboTerrestre("RT1", 2, 2, "Sul", 30);
+        RoboAereo roboAereo = new RoboAereo("RAE1", 3, 3, "Leste", 100);
+        RoboColheitadera colheitadera = new RoboColheitadera("RC1", 4, 4, "Oeste", 20, false);
+        RoboDrone drone = new RoboDrone("RD1", 5, 5, "Norte", 50);
+
+        // 3. Adição de robôs ao ambiente
+        System.out.println("\n3. Teste de Adição de Robôs ao Ambiente");
         ambiente.adicionarRobo(roboAvancado);
-        ambiente.adicionarRobo(roboExplorador);
+        ambiente.adicionarRobo(roboTerrestre);
+        ambiente.adicionarRobo(roboAereo);
+        ambiente.adicionarRobo(colheitadera);
+        ambiente.adicionarRobo(drone);
         ambiente.adicionarEntidade(roboAvancado);
-        ambiente.adicionarEntidade(roboExplorador);
-        
-        // 6. Testes iniciais das funcionalidades
-        System.out.println("\n=== Testes Iniciais ===");
-        
+        ambiente.adicionarEntidade(roboTerrestre);
+        ambiente.adicionarEntidade(roboAereo);
+        ambiente.adicionarEntidade(colheitadera);
+        ambiente.adicionarEntidade(drone);
+        System.out.println("Número de robôs no ambiente: " + ambiente.getFrota().size());
+
+        // 4. Teste de movimentação
+        System.out.println("\n4. Teste de Movimentação");
         try {
-            // Teste de movimentação
-            System.out.println("\nTestando movimentação do robô R1:");
+            System.out.println("4.1 Teste de movimentação normal");
             roboAvancado.ligar();
             roboAvancado.moverPara(1, 1, 0);
-            
-            // Teste de sensores
-            System.out.println("\nTestando sensores:");
-            roboAvancado.acionarSensores();
-            
-            // Teste de exploração
-            System.out.println("\nTestando exploração:");
-            roboExplorador.ligar();
-            roboExplorador.explorarRegiao(2);
-            
-            // Teste de operação autônoma
-            System.out.println("\nTestando operação autônoma:");
-            roboAvancado.executarOperacaoAutonoma("Patrulha");
-            
+            System.out.println("Robô Avançado movido para (1,1,0)");
+
+            System.out.println("\n4.2 Teste de movimentação com robô desligado");
+            roboTerrestre.moverPara(3, 3, 0);
+            System.out.println("Erro: O robô deveria ter lançado uma exceção");
+        } catch (IllegalStateException e) {
+            System.out.println("Sucesso: " + e.getMessage());
         } catch (Exception e) {
-            System.err.println("Erro durante os testes: " + e.getMessage());
+            System.out.println("Erro inesperado: " + e.getMessage());
         }
-        
-        System.out.println("\n=== Estado do Ambiente ===");
+
+        // 5. Teste de colisão
+        System.out.println("\n5. Teste de Colisão");
+        try {
+            roboTerrestre.ligar();
+            roboTerrestre.moverPara(1, 1, 0); // Tentando mover para onde está o roboAvancado
+            System.out.println("Erro: Deveria ter detectado colisão");
+        } catch (ColisaoException e) {
+            System.out.println("Sucesso: Colisão detectada corretamente");
+        } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
+        }
+
+        // 6. Teste de robôs aéreos
+        System.out.println("\n6. Teste de Robôs Aéreos");
+        try {
+            roboAereo.ligar();
+            roboAereo.subir(30);
+            System.out.println("RoboAereo subiu para altitude: " + roboAereo.getAltitude());
+            
+            drone.ligar();
+            drone.subir(20);
+            drone.ativarModoPairar();
+            System.out.println("Drone está pairando: " + drone.isPairando());
+        } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
+        }
+
+        // 7. Teste de robôs especializados
+        System.out.println("\n7. Teste de Robôs Especializados");
+        try {
+            roboAvancado.ligar();
+            roboAvancado.explorarRegiao(2);
+            roboAvancado.executarOperacaoAutonoma("Patrulha");
+        } catch (Exception e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+
+        // 8. Visualização do ambiente
+        System.out.println("\n8. Visualização do Ambiente");
         ambiente.visualizarAmbiente();
+
+        // 9. Teste de remoção de robôs
+        System.out.println("\n9. Teste de Remoção de Robôs");
+        ambiente.removerRobo("RA1");
+        System.out.println("Número de robôs após remoção: " + ambiente.getFrota().size());
+
+        // 10. Teste de obstáculos
+        System.out.println("\n10. Teste de Obstáculos");
+        ambiente.adicionarObstaculo(7, 7, 0, 2, 2, 3, TipoObstaculo.PREDIO);
+        try {
+            roboTerrestre.moverPara(7, 7, 0);
+            System.out.println("Erro: Deveria ter detectado colisão com obstáculo");
+        } catch (ColisaoException e) {
+            System.out.println("Sucesso: Colisão com obstáculo detectada");
+        } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
+        }
+
+        System.out.println("\n=== Testes Concluídos ===");
         
-        // 7. Inicialização do menu interativo
+        // Iniciando o menu interativo
         System.out.println("\n=== Iniciando Menu Interativo ===");
         Menu menu = new Menu(ambiente, roboAvancado);
         menu.exibirMenu();

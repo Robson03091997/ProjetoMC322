@@ -1,6 +1,7 @@
 package ambientes.robos.robosaereos;
 
 import ambientes.robos.Robo;
+import ambientes.robos.EstadoRobo;
 
 public class RoboAereo extends Robo {
 
@@ -49,12 +50,12 @@ public class RoboAereo extends Robo {
     // Fazendo override para usar como default a exibição da posição incluindo a posicaoZ
     @Override
     public void exibirPosicao() {
-        System.out.println(this.nome + " está em: (" + this.posicaoX + ", " + this.posicaoY + ", " + this.posicaoZ + ")");
+        System.out.println(this.id + " está em: (" + this.posicaoX + ", " + this.posicaoY + ", " + this.posicaoZ + ")");
     }
 
     public String toString(){
         String out = "";
-        out += "Robo " + getNome();
+        out += "Robo " + getId();
         out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", " + getAltitude() + "), direcao: " + getDirecao() + " altitude máxima: " + getAltitudeMaxima();
         out += "\n--Lista de Sensores ------------------------------------------------------------\n";
         out += "--Número Limite de sensores: " + getLimiteNumSensores() + "Número de Sensores Conectados: " + sensores.size();
@@ -64,5 +65,21 @@ public class RoboAereo extends Robo {
             out += "\n";
         }
         return out;
+    }
+
+    @Override
+    public void executarTarefa() {
+        if (this.estado == EstadoRobo.DESLIGADO) {
+            throw new IllegalStateException("Robô aéreo desligado não pode executar tarefas");
+        }
+        System.out.println("Robô aéreo " + this.id + " executando tarefa de patrulhamento aéreo");
+        this.estado = EstadoRobo.EM_TAREFA;
+        // Simula execução da tarefa
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        this.estado = EstadoRobo.LIGADO;
     }
 }

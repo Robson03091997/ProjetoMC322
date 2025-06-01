@@ -73,7 +73,7 @@ public class RoboColheitadera extends RoboTerrestre {
     
     public String toString(){
         String out = "";
-        out += "Robo " + getNome();
+        out += "Robo " + getId();
         out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", " +getPosZ() +"), direcao: " + getDirecao() + " velocidade máxima: " + getVelocidadeMaxima();
         out += "\n--foice: " + ativaInativa(foice);
         out += "\n--Lista de Sensores ------------------------------------------------------------\n";

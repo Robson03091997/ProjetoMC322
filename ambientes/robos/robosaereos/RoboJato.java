@@ -12,13 +12,13 @@ public class RoboJato extends RoboAereo {
     // Método para acelerar
     public void acelerar(int incremento) {
         this.velocidade += incremento;
-        System.out.println(this.nome + " acelerou para " + this.velocidade + " km/h.");
+        System.out.println(this.id + " acelerou para " + this.velocidade + " km/h.");
     }
 
     // Método para reduzir a velocidade
     public void reduzirVelocidade(int decremento) {
         this.velocidade = Math.max(0, this.velocidade - decremento);
-        System.out.println(this.nome + " reduziu a velocidade para " + this.velocidade + " km/h.");
+        System.out.println(this.id + " reduziu a velocidade para " + this.velocidade + " km/h.");
     }
 
     // Método getter para a velocidade
@@ -28,7 +28,7 @@ public class RoboJato extends RoboAereo {
 
     public String toString(){
         String out = "";
-        out += "Robo " + getNome();
+        out += "Robo " + getId();
         out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", " + getAltitude() + ") direcao: " + getDirecao() + " altitude máxima: " + getAltitudeMaxima() + " velocidade: " + getVelocidade();
         out += "\n--Lista de Sensores ------------------------------------------------------------\n";
         out += "--Número Limite de sensores: " + getLimiteNumSensores() + " Número de Sensores Conectados: " + sensores.size();

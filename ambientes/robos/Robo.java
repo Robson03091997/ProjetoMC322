@@ -6,8 +6,11 @@ import ambientes.ColisaoException;
 import ambientes.sensores.Sensor;
 import ambientes.entidade.Entidade;
 import ambientes.entidade.TipoEntidade;
+import ambientes.comunicacao.Comunicavel;
+import ambientes.comunicacao.RoboDesligadoException;
+import ambientes.comunicacao.ErroComunicacaoException;
 
-public abstract class Robo implements Entidade {
+public abstract class Robo implements Entidade, Comunicavel {
     protected String id;  // Identificador único
     protected EstadoRobo estado;
     protected int posicaoX;
@@ -20,10 +23,11 @@ public abstract class Robo implements Entidade {
     public ArrayList<Sensor> sensores = new ArrayList<>();
 
     //declarando construtores ------------------------------------------------------
-    protected Robo(String id, int posicaoX, int posicaoY, String direcao){
+    public Robo(String id, int posicaoX, int posicaoY, String direcao) {
         this.id = id;
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
+        this.posicaoZ = 0;
         this.direcao = direcao;
         this.estado = EstadoRobo.DESLIGADO;
         Robo.numeroDeRobos++;
@@ -97,15 +101,13 @@ public abstract class Robo implements Entidade {
     }
 
     public void ligar() {
-        if (estado == EstadoRobo.DESLIGADO) {
-            estado = EstadoRobo.LIGADO;
-        }
+        this.estado = EstadoRobo.LIGADO;
+        System.out.println("Robô " + this.id + " ligado.");
     }
 
     public void desligar() {
-        if (estado != EstadoRobo.EM_MOVIMENTO && estado != EstadoRobo.EM_TAREFA) {
-            estado = EstadoRobo.DESLIGADO;
-        }
+        this.estado = EstadoRobo.DESLIGADO;
+        System.out.println("Robô " + this.id + " desligado.");
     }
 
     public EstadoRobo getEstado() {
@@ -120,11 +122,11 @@ public abstract class Robo implements Entidade {
         return this.id;
     }
 
-    protected String getDirecao() {
+    public String getDirecao() {
         return this.direcao;
     }
 
-    protected void setDirecao(String direcao) {
+    public void setDirecao(String direcao) {
         this.direcao = direcao;
     }
 
@@ -165,16 +167,58 @@ public abstract class Robo implements Entidade {
 
     @Override
     public String toString() {
-        String out = "";
-        out += "Robô " + getId();
-        out += "\n--Estado: " + getEstado();
-        out += "\n--Posição: (" + getX() + ", " + getY() + ", " + getZ() + "), direção: " + getDirecao();
-        out += "\n--Lista de Sensores ------------------------------------------------------------\n";
-        out += "--Número Limite de sensores: " + getLimiteNumSensores() + " Número de Sensores Conectados: " + sensores.size();
-        out += "\n";
-        for (Sensor sensor : sensores) {
-            out += sensor + "\n";
+        return "Robô " + this.id + " em (" + this.posicaoX + "," + this.posicaoY + "," + this.posicaoZ + 
+               ") direção " + this.direcao + " estado " + this.estado;
+    }
+
+    public void exibirPosicao() {
+        System.out.println(this.id + " está em: (" + this.posicaoX + ", " + this.posicaoY + ", " + this.posicaoZ + ")");
+    }
+
+    public int getPosX() {
+        return this.posicaoX;
+    }
+
+    public int getPosY() {
+        return this.posicaoY;
+    }
+
+    public int getPosZ() {
+        return this.posicaoZ;
+    }
+
+    public void mover(int x, int y, int z) {
+        this.posicaoX = x;
+        this.posicaoY = y;
+        this.posicaoZ = z;
+    }
+
+    public String ativaInativa(boolean estado) {
+        return estado ? "ativo" : "inativo";
+    }
+
+    @Override
+    public void enviarMensagem(Comunicavel destinatario, String mensagem) {
+        try {
+            if (this.estado == EstadoRobo.DESLIGADO) {
+                throw new RoboDesligadoException("Robô " + this.id + " está desligado e não pode enviar mensagens");
+            }
+            System.out.println("Robô " + this.id + " enviando mensagem para " + destinatario + ": " + mensagem);
+            destinatario.receberMensagem(mensagem);
+        } catch (RoboDesligadoException e) {
+            System.err.println("Erro: " + e.getMessage());
         }
-        return out;
+    }
+
+    @Override
+    public void receberMensagem(String mensagem) {
+        try {
+            if (this.estado == EstadoRobo.DESLIGADO) {
+                throw new RoboDesligadoException("Robô " + this.id + " está desligado e não pode receber mensagens");
+            }
+            System.out.println("Robô " + this.id + " recebeu mensagem: " + mensagem);
+        } catch (RoboDesligadoException e) {
+            System.err.println("Erro: " + e.getMessage());
+        }
     }
 }

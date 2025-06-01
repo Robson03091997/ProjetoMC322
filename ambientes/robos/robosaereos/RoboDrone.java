@@ -1,24 +1,27 @@
 package ambientes.robos.robosaereos;
+
+import ambientes.robos.EstadoRobo;
+
 // Classe RoboDrone, que herda de RoboAereo
 public class RoboDrone extends RoboAereo {
     private boolean pairando;
 
     // Declarando o construtor do RoboDrone
-    public RoboDrone(String nome, int posicaoX, int posicaoY, String direcao, int altitudeMaxima) {
-        super(nome, posicaoX, posicaoY, direcao, altitudeMaxima);
+    public RoboDrone(String id, int posicaoX, int posicaoY, String direcao, int altitudeMaxima) {
+        super(id, posicaoX, posicaoY, direcao, altitudeMaxima);
         this.pairando = false;
     }
 
     // Método para ativar o modo de pairar
     public void ativarModoPairar() {
         this.pairando = true;
-        System.out.println(this.nome + " está pairando no ar.");
+        System.out.println(this.id + " está pairando no ar.");
     }
 
     // Método para desativar o modo de pairar
     public void desativarModoPairar() {
         this.pairando = false;
-        System.out.println(this.nome + " saiu do modo de pairar.");
+        System.out.println(this.id + " saiu do modo de pairar.");
     }
 
     // Método getter para saber se o drone está pairando
@@ -26,23 +29,26 @@ public class RoboDrone extends RoboAereo {
         return this.pairando;
     }
 
-    public String toString(){
-        String out = "";
-        out += "Robo " + getNome();
-        out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", " + getAltitude() + ")\n direcao: " + getDirecao() + " altitude máxima: " + getAltitudeMaxima();
-        if (isPairando()){
-            out += " pairando: sim"; 
+    @Override
+    public void executarTarefa() {
+        if (this.estado == EstadoRobo.DESLIGADO) {
+            throw new IllegalStateException("Drone desligado não pode executar tarefas");
         }
-        else {
-            out += " pairando: não";
+        System.out.println("Drone " + this.id + " executando tarefa de reconhecimento aéreo");
+        this.estado = EstadoRobo.EM_TAREFA;
+        // Simula execução da tarefa
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-        out += "\n--Lista de Sensores ------------------------------------------------------------\n";
-        out += "--Número Limite de sensores: " + getLimiteNumSensores() + " Número de Sensores Conectados: " + sensores.size();
-        out += "\n";
-        for (int i = 0; i < sensores.size(); i++){
-            out += sensores.get(i);
-            out += "\n";
-        }
+        this.estado = EstadoRobo.LIGADO;
+    }
+
+    @Override
+    public String toString() {
+        String out = super.toString();
+        out += "\nModo Pairar: " + (pairando ? "Ativado" : "Desativado");
         return out;
     }
 }

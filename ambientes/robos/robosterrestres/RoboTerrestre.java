@@ -1,6 +1,7 @@
 package ambientes.robos.robosterrestres;
 
 import ambientes.robos.Robo;
+import ambientes.robos.EstadoRobo;
 
 public class RoboTerrestre extends Robo{
     protected int velocidadeMaxima;
@@ -44,7 +45,7 @@ public class RoboTerrestre extends Robo{
 
     public String toString(){
         String out = "";
-        out += "Robo " + getNome();
+        out += "Robo " + getId();
         out += "\n--Posicao: (" + getPosX() + ", " + getPosY() + ", " +getPosZ() +"), direcao: " + getDirecao() + " velocidade máxima: " + getVelocidadeMaxima();
         out += "\n--Lista de Sensores ------------------------------------------------------------\n";
         out += "--Número Limite de sensores: " + getLimiteNumSensores() + " Número de Sensores Conectados: " + sensores.size();
@@ -54,6 +55,22 @@ public class RoboTerrestre extends Robo{
             out += "\n";
         }
         return out;
+    }
+
+    @Override
+    public void executarTarefa() {
+        if (this.estado == EstadoRobo.DESLIGADO) {
+            throw new IllegalStateException("Robô terrestre desligado não pode executar tarefas");
+        }
+        System.out.println("Robô terrestre " + this.id + " executando tarefa de patrulhamento terrestre");
+        this.estado = EstadoRobo.EM_TAREFA;
+        // Simula execução da tarefa
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        this.estado = EstadoRobo.LIGADO;
     }
 
 }

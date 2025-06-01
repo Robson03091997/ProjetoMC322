@@ -10,8 +10,10 @@ import ambientes.robos.interfaces.Explorador;
 import ambientes.robos.interfaces.Atacante;
 import ambientes.sensores.Sensoreavel;
 import ambientes.comunicacao.Comunicavel;
+import ambientes.comunicacao.RoboDesligadoException;
+import ambientes.comunicacao.ErroComunicacaoException;
 
-public class RoboAvancado extends RoboSensorial implements Autonomo, Explorador, Atacante, Comunicavel {
+public class RoboAvancado extends RoboSensorial implements Autonomo, Explorador, Atacante {
     private int nivelEnergia;
     private int nivelAgressividade;
     private boolean modoAutonomo;

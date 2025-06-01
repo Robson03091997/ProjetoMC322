@@ -1,10 +1,10 @@
 package ambientes.entidade;
 
 public interface Entidade {
-    public int getX();
-    public int getY();
-    public int getZ();
-    public TipoEntidade getTipo();
+    int getX();
+    int getY();
+    int getZ();
+    TipoEntidade getTipo();
     public String getDescricao();
     public char getRepresentacao();
 }
