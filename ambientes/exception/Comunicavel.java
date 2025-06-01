@@ -1,4 +1,4 @@
-package ambientes.comunicacao;
+package ambientes.exception;
 
 import ambientes.robos.RoboDesligadoException;
 

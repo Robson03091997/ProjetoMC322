@@ -1,4 +1,4 @@
-package ambientes.comunicacao;
+package ambientes.exception;
 
 public class ErroComunicacaoException extends Exception {
     public ErroComunicacaoException(String message) {

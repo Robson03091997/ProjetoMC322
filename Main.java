@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import ambientes.robos.RoboAvancado;
 import ambientes.Menu;
 import ambientes.entidade.Entidade;
-import ambientes.ColisaoException;
+import ambientes.exception.ColisaoException;
 
 public class Main {
 

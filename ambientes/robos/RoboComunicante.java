@@ -1,10 +1,10 @@
 package ambientes.robos;
 
-import ambientes.comunicacao.Comunicavel;
-import ambientes.comunicacao.CentralComunicacao;
-import ambientes.comunicacao.ErroComunicacaoException;
+import ambientes.exception.CentralComunicacao;
+import ambientes.exception.Comunicavel;
+import ambientes.exception.ErroComunicacaoException;
 
-public abstract class RoboComunicante extends Robo implements Comunicavel {
+public abstract class RoboComunicante extends Robo {
     protected CentralComunicacao central;
     private boolean comunicacaoHabilitada;
 

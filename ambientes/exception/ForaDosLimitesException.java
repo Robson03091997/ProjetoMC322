@@ -1,4 +1,4 @@
-package ambientes;
+package ambientes.exception;
 
 public class ForaDosLimitesException extends Exception {
     public ForaDosLimitesException(String message) {

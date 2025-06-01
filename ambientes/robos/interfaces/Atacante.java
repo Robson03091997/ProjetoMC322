@@ -1,6 +1,6 @@
 package ambientes.robos.interfaces;
 
-import ambientes.AcaoNaoPermitidaException;
+import ambientes.exception.AcaoNaoPermitidaException;
 
 public interface Atacante {
     /**

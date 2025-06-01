@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import ambientes.*;
+import ambientes.exception.ColisaoException;
 import ambientes.robos.*;
 
 public class Menu {

@@ -1,4 +1,4 @@
-package ambientes.comunicacao;
+package ambientes.exception;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;

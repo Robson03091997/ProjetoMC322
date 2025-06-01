@@ -1,6 +1,8 @@
 package ambientes;
 import java.util.ArrayList;
 import ambientes.entidade.*;
+import ambientes.exception.ColisaoException;
+import ambientes.exception.ForaDosLimitesException;
 import ambientes.obstaculos.*;
 import ambientes.robos.*;
 import ambientes.sensores.*;
@@ -11,11 +13,10 @@ public class Ambiente
     private int largura;
     private int profundidade;
     private int altura;
-    private Entidade[][][] mapa;
+    private TipoEntidade[][][] mapa;
     private ArrayList<Robo> frota;
     private ArrayList<Obstaculo> restricoes;
     private ArrayList<Entidade> entidades = new ArrayList<>();
-    private TipoEntidade vazio = TipoEntidade.VAZIO;
 
     //construtor
     
@@ -24,7 +25,7 @@ public class Ambiente
         this.largura = largura;
         this.profundidade = profundidade;
         this.altura = altura;
-        this.mapa = new Entidade[largura][profundidade][altura];
+        this.mapa = new TipoEntidade[largura][profundidade][altura];
         this.frota = new ArrayList<>();
         this.restricoes = new ArrayList<>();
         this.inicializaMapa();
@@ -34,12 +35,12 @@ public class Ambiente
         for (int x = 0; x < largura; x++) {
             for (int y = 0; y < profundidade; y++) {
                 for (int z = 0; z < altura; z++) {
-                    mapa[x][y][z] = null;
+                    mapa[x][y][z] = TipoEntidade.VAZIO;
                 }
             }
         }
         for (int i = 0; i < entidades.size(); i++){
-            mapa[entidades.get(i).getX()][entidades.get(i).getY()][entidades.get(i).getZ()] = entidades.get(i);
+            mapa[entidades.get(i).getX()][entidades.get(i).getY()][entidades.get(i).getZ()] = entidades.get(i).getTipo();
         }
     }
 
@@ -89,7 +90,7 @@ public class Ambiente
             if (!dentroDosLimites(x, y, z)) {
                 throw new ColisaoException("Posição fora dos limites");
             }
-            return mapa[x][y][z] != null;
+            return mapa[x][y][z] != TipoEntidade.VAZIO;
         } catch (ForaDosLimitesException e) {
             throw new ColisaoException(e.getMessage());
         }
@@ -101,16 +102,16 @@ public class Ambiente
                 throw new ColisaoException("Nova posição fora dos limites");
             }
             // Verifica se há colisão
-            if (mapa[novoX][novoY][novoZ] != null) {
+            if (mapa[novoX][novoY][novoZ] != TipoEntidade.VAZIO) {
                 throw new ColisaoException("Colisão detectada na posição (" + novoX + "," + novoY + "," + novoZ + ")");
             }
             // Remove da posição atual
-            mapa[e.getX()][e.getY()][e.getZ()] = null;
+            mapa[e.getX()][e.getY()][e.getZ()] = TipoEntidade.VAZIO;
             // Move para nova posição
             if (e instanceof Robo) {
                 ((Robo) e).mover(novoX, novoY, novoZ);
             }
-            mapa[novoX][novoY][novoZ] = e;
+            mapa[novoX][novoY][novoZ] = e.getTipo();
         } catch (ForaDosLimitesException ex) {
             throw new ColisaoException(ex.getMessage());
         }
@@ -148,7 +149,7 @@ public class Ambiente
                 boolean posicaoVazia = true;
                 // Procura entidade em qualquer altura nesta posição x,y
                 for (int z = 0; z < altura; z++) {
-                    if (mapa[x][y][z] != null) {
+                    if (mapa[x][y][z] != TipoEntidade.VAZIO) {
                         // Encontra a entidade correspondente para pegar sua representação
                         for (Entidade e : entidades) {
                             if (e.getX() == x && e.getY() == y && e.getZ() == z) {
@@ -171,9 +172,11 @@ public class Ambiente
     public void adicionarRobo(Robo robo){
         frota.add(robo);
         robo.setAmbiente(this);
+        adicionarEntidade(robo);
     }
 
     public void removerRobo(Robo robo){
+        removerEntidade(robo);
         frota.remove(robo);
     }
 
@@ -181,6 +184,7 @@ public class Ambiente
         for (int i = 0; i < frota.size(); i++) {
             if (frota.get(i).getId().equals(robo)) {
                 System.out.println("Robo " + frota.get(i).getId() + " removido.");
+                removerEntidade(frota.get(i));
                 frota.remove(i);
                 break;
             }
@@ -195,17 +199,20 @@ public class Ambiente
             }
             Obstaculo obstaculo = new Obstaculo(x, y, z, largura, profundidade, altura, tipo);
             restricoes.add(obstaculo);
+            adicionarEntidade(obstaculo);
         } catch (ForaDosLimitesException e) {
             System.out.println(e.getMessage());
         }
     }
 
     public void removerObstaculo(Obstaculo obstaculo){
+        removerEntidade(obstaculo);
         restricoes.remove(obstaculo);
     }
 
     public void removerObstaculo(int obstaculo){
         if (restricoes.size() > obstaculo && obstaculo > -1){
+            removerEntidade(restricoes.get(obstaculo));
             restricoes.remove(obstaculo);
         }
         else{
@@ -219,7 +226,12 @@ public class Ambiente
                 System.out.println("Posição da entidade fora dos limites do ambiente");
                 return;
             }
-            mapa[e.getX()][e.getY()][e.getZ()] = e;
+            if (e.getTipo() == TipoEntidade.OBSTACULO){
+                arrumaMapaObstaculo(e, e.getTipo());
+            }
+            else{
+                mapa[e.getX()][e.getY()][e.getZ()] = e.getTipo();
+            }
         } catch (ForaDosLimitesException ex) {
             System.out.println(ex.getMessage());
         }
@@ -231,11 +243,31 @@ public class Ambiente
                 System.out.println("Posição da entidade fora dos limites do ambiente");
                 return;
             }
-            mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = null;
+            if (entidade.getTipo() == TipoEntidade.VAZIO){
+                arrumaMapaObstaculo(entidade, TipoEntidade.VAZIO);
+            }
+            else{
+                mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = TipoEntidade.VAZIO;
+            }
             entidades.remove(entidade);
         } catch (ForaDosLimitesException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void arrumaMapaObstaculo(Entidade e, TipoEntidade tipo){
+        for (int i = 0; i < restricoes.size(); i++){
+                if (e.getX() == restricoes.get(i).getX() && e.getY() == restricoes.get(i).getY() && e.getZ() == restricoes.get(i).getZ()){
+                    for (int a = restricoes.get(i).getX(); a < restricoes.get(i).getX1(); a++){
+                        for (int b = restricoes.get(i).getY(); b < restricoes.get(i).getY1(); b++){
+                            for (int c = restricoes.get(i).getZ(); a < restricoes.get(i).getZ1(); c++){
+                                this.mapa[a][b][c] = tipo;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
     }
 
     public void removerEntidade(int entidade) {
@@ -245,7 +277,12 @@ public class Ambiente
                     System.out.println("Posição da entidade fora dos limites do ambiente");
                     return;
                 }
-                mapa[entidades.get(entidade).getX()][entidades.get(entidade).getY()][entidades.get(entidade).getZ()] = null;
+                if (entidades.get(entidade).getTipo() == TipoEntidade.VAZIO){
+                    arrumaMapaObstaculo(entidades.get(entidade), TipoEntidade.VAZIO);
+                }
+                else{
+                    mapa[entidades.get(entidade).getX()][entidades.get(entidade).getY()][entidades.get(entidade).getZ()] = TipoEntidade.VAZIO;
+                }
                 restricoes.remove(entidade);
             }
         } catch (ForaDosLimitesException e) {

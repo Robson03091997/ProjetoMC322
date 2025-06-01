@@ -1,14 +1,13 @@
 package ambientes.robos;
 import java.util.ArrayList;
-
 import ambientes.Ambiente;
-import ambientes.ColisaoException;
 import ambientes.sensores.Sensor;
 import ambientes.entidade.Entidade;
 import ambientes.entidade.TipoEntidade;
-import ambientes.comunicacao.Comunicavel;
-import ambientes.comunicacao.RoboDesligadoException;
-import ambientes.comunicacao.ErroComunicacaoException;
+import ambientes.exception.ColisaoException;
+import ambientes.exception.Comunicavel;
+import ambientes.exception.ErroComunicacaoException;
+import ambientes.exception.RoboDesligadoException;
 
 public abstract class Robo implements Entidade, Comunicavel {
     protected String id;  // Identificador único
@@ -208,6 +207,9 @@ public abstract class Robo implements Entidade, Comunicavel {
         } catch (RoboDesligadoException e) {
             System.err.println("Erro: " + e.getMessage());
         }
+         catch (ErroComunicacaoException e){
+            System.err.println("Erro: " + e.getMessage());
+         }
     }
 
     @Override

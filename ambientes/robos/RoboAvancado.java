@@ -2,16 +2,17 @@ package ambientes.robos;
 
 import java.util.HashMap;
 import java.util.Map;
-import ambientes.AcaoNaoPermitidaException;
-import ambientes.RecargaNecessariaException;
+
 import ambientes.entidade.TipoEntidade;
+import ambientes.exception.AcaoNaoPermitidaException;
+import ambientes.exception.Comunicavel;
+import ambientes.exception.ErroComunicacaoException;
+import ambientes.exception.RecargaNecessariaException;
+import ambientes.exception.RoboDesligadoException;
 import ambientes.robos.interfaces.Autonomo;
 import ambientes.robos.interfaces.Explorador;
 import ambientes.robos.interfaces.Atacante;
 import ambientes.sensores.Sensoreavel;
-import ambientes.comunicacao.Comunicavel;
-import ambientes.comunicacao.RoboDesligadoException;
-import ambientes.comunicacao.ErroComunicacaoException;
 
 public class RoboAvancado extends RoboSensorial implements Autonomo, Explorador, Atacante {
     private int nivelEnergia;
