@@ -1,3 +1,151 @@
+# Simulador de Robôs
+
+Este projeto implementa um simulador de robôs exploradores em um ambiente 2D. Os robôs são capazes de se mover pelo ambiente, detectar obstáculos e executar missões de exploração.
+
+## Estrutura do Projeto
+
+O projeto está organizado nos seguintes pacotes:
+
+- `ambiente`: Contém a classe `Ambiente` que representa o espaço 2D onde os robôs se movem.
+- `robo`: Contém as classes e interfaces relacionadas aos robôs:
+  - `AgenteInteligente`: Classe abstrata que define o comportamento básico dos robôs.
+  - `RoboExplorador`: Implementação concreta de um robô explorador.
+  - `ControleMovimento`: Interface para controle de movimento.
+  - `GerenciadorSensores`: Interface para gerenciamento de sensores.
+  - `ModuloComunicacao`: Interface para comunicação.
+- `sensores`: Contém a interface `Sensor` para implementação de diferentes tipos de sensores.
+- `missao`: Contém as classes relacionadas às missões:
+  - `Missao`: Interface que define o comportamento de uma missão.
+  - `MissaoExplorar`: Implementação de uma missão de exploração.
+- `comunicacao`: Contém as classes de comunicação:
+  - `Comunicador`: Interface para comunicação entre robôs.
+  - `Logger`: Classe para registro de logs.
+- `main`: Contém as classes principais:
+  - `Main`: Ponto de entrada do programa.
+  - `MenuMissao`: Interface de usuário para controle das missões.
+  - `CarregadorConfiguracao`: Classe para carregar configurações do simulador.
+
+## Funcionalidades Implementadas
+
+1. **Ambiente 2D**
+   - Representação em matriz
+   - Suporte a obstáculos
+   - Visualização do estado atual
+
+2. **Robôs Exploradores**
+   - Movimento em 8 direções
+   - Detecção de obstáculos
+   - Registro de posições visitadas
+   - Execução de missões
+
+3. **Sistema de Missões**
+   - Missão de exploração
+   - Registro de progresso
+   - Verificação de conclusão
+
+4. **Sistema de Logs**
+   - Registro de posições
+   - Registro de detecção de obstáculos
+   - Registro de eventos da missão
+
+## Como Executar
+
+1. Compile o projeto:
+   ```
+   javac -d bin src/ambiente/*.java src/robo/*.java src/sensores/*.java src/missao/*.java src/comunicacao/*.java src/main/*.java
+   ```
+
+2. Execute o programa:
+   ```
+   java -cp bin main.Main
+   ```
+
+## Configuração do Simulador
+
+O arquivo `config/simulador.txt` define a configuração inicial do simulador:
+
+```
+<largura> <altura>
+<x1> <y1>
+<x2> <y2>
+...
+ROBOS
+<nome1> <x1> <y1>
+<nome2> <x2> <y2>
+...
+```
+
+- A primeira linha define as dimensões do ambiente
+- As linhas seguintes definem as posições dos obstáculos
+- A linha "ROBOS" marca o início da lista de robôs
+- Cada linha após "ROBOS" define um robô com seu nome e posição inicial
+
+## Diagrama de Classes
+
+```
++----------------+     +----------------+     +----------------+
+|    Ambiente    |     | AgenteInteligente |     |   RoboExplorador |
++----------------+     +----------------+     +----------------+
+| -matriz        |     | -nome          |     | -posicoesVisitadas|
+| -largura       |     | -posicaoX      |     +----------------+
+| -altura        |     | -posicaoY      |     | +executarCiclo()|
++----------------+     | -ambiente      |     | +inicializar() |
+| +exibir()      |     | -controleMov   |     +----------------+
+| +adicionarObs()|     | -gerenciadorSen|           ^
++----------------+     | -moduloCom     |           |
+        ^              +----------------+           |
+        |              | +executarCiclo()|           |
+        |              | +inicializar() |           |
+        |              +----------------+           |
+        |                     ^                     |
+        |                     |                     |
++----------------+     +----------------+     +----------------+
+|    Missao      |     | ControleMov    |     | GerenciadorSen |
++----------------+     +----------------+     +----------------+
+| +executar()    |     | +mover()       |     | +adicionarSen()|
+| +getDescricao()|     | +verificarMov()|     | +getSensores() |
++----------------+     +----------------+     +----------------+
+        ^
+        |
++----------------+
+| MissaoExplorar |
++----------------+
+| -posicoesVisit |
++----------------+
+| +executar()    |
++----------------+
+```
+
+## Boas Práticas
+
+1. **Encapsulamento**
+   - Atributos privados com getters/setters
+   - Interfaces bem definidas
+   - Implementações ocultas
+
+2. **Modularidade**
+   - Pacotes organizados por funcionalidade
+   - Classes com responsabilidade única
+   - Interfaces para acoplamento fraco
+
+3. **Documentação**
+   - Comentários explicativos
+   - README detalhado
+   - Diagrama de classes
+
+4. **Tratamento de Erros**
+   - Validação de entradas
+   - Tratamento de exceções
+   - Mensagens de erro claras
+
+## Autores
+
+[Seus nomes aqui]
+
+## Data de Submissão
+
+[Data atual]
+
 # Projeto MC322 - Sistema de Simulação de Robôs
 
 ## Principais Mudanças no Laboratório 4
