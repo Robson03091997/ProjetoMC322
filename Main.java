@@ -1,20 +1,15 @@
-import java.util.Scanner;
 import ambientes.Ambiente;
+import ambientes.Menu;
+import ambientes.exception.ColisaoException;
 import ambientes.obstaculos.TipoObstaculo;
 import ambientes.robos.Robo;
+import ambientes.robos.RoboAvancado;
 import ambientes.robos.robosaereos.RoboAereo;
-import ambientes.robos.robosaereos.RoboJato;
 import ambientes.robos.robosaereos.RoboDrone;
 import ambientes.robos.robosterrestres.RoboColheitadera;
-import ambientes.robos.robosterrestres.RoboPreparaSolo;
 import ambientes.robos.robosterrestres.RoboTerrestre;
-import ambientes.sensores.Sensor;
-import ambientes.sensores.SensorProximidade;
 import java.util.ArrayList;
-import ambientes.robos.RoboAvancado;
-import ambientes.Menu;
-import ambientes.entidade.Entidade;
-import ambientes.exception.ColisaoException;
+import java.util.Scanner;
 
 public class Main {
 

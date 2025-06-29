@@ -1,0 +1,14 @@
+# Arquivo de configuração do ambiente e robôs
+# . = espaço vazio
+# # = obstáculo
+# * = alvo
+
+[AMBIENTE]
+.....
+.#.#.
+.....
+.#.#.
+....*
+
+[ROBOS]
+ROBO: R2D2,0,0 
